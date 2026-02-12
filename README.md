@@ -1,0 +1,1 @@
+This is a trivia game created using Gemini that can be used for Bollywood Aficionados. You can choose from categories such as Movies, Song Names, Actor Names, Director Names, and Music Director Names along with minimum word count you want for the category. You can use the internet if you have connection or use from local store if you dont have internet connection. Enjoy
