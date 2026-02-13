@@ -1,7 +1,8 @@
+import * as GoogleAI from "@google/genai";
+
 export default async function handler(req, res) {
-  // Confirming key arrival
   const apiKey = process.env.API_KEY;
-  console.log("DEBUG: Processing request, key prefix:", apiKey ? apiKey.substring(0, 4) : "NONE");
+  console.log("DEBUG: Key detected, prefix:", apiKey ? apiKey.substring(0, 4) : "NONE");
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: "Method Not Allowed" });
@@ -12,13 +13,19 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 1. DYNAMIC IMPORT: This bypasses the "GoogleGenerativeAI is not a function" error
-    const { GoogleGenerativeAI } = await import("@google/genai");
-    
-    // 2. INITIALIZE: We use the key as a direct string
+    // 1. LOCATE THE CONSTRUCTOR: 
+    // This looks in every possible place Vercel might hide the class
+    const GoogleGenerativeAI = GoogleAI.GoogleGenerativeAI || 
+                               (GoogleAI.default && GoogleAI.default.GoogleGenerativeAI) ||
+                               GoogleAI.default;
+
+    if (typeof GoogleGenerativeAI !== 'function') {
+        console.error("Module structure:", Object.keys(GoogleAI));
+        throw new Error("Could not find a valid GoogleGenerativeAI constructor.");
+    }
+
+    // 2. INITIALIZE:
     const genAI = new GoogleGenerativeAI(apiKey);
-    
-    // 3. GET MODEL: Use the standard 1.5-flash model
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     
     const { category, minWords } = req.body;
