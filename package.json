@@ -1,6 +1,7 @@
 {
   "name": "bollywood-data-engine",
   "version": "1.0.0",
+  "type": "module", 
   "dependencies": {
     "@google/genai": "^1.41.0"
   },
