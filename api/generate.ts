@@ -1,24 +1,24 @@
 import { GoogleGenAI } from "@google/genai";
 
 export default async function handler(req, res) {
-// ADD THIS LINE HERE:
+  // This confirms the key is available to the server
   console.log("DEBUG: Key starts with:", process.env.API_KEY ? process.env.API_KEY.substring(0, 4) : "UNDEFINED");
-  
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: "Method Not Allowed" });
   }
 
-  // Access the key directly from the environment
   const apiKey = process.env.API_KEY;
 
-  if (!apiKey || apiKey === "") {
-    return res.status(500).json({ 
-      error: "The server is missing the API_KEY. Please ensure it is set in Vercel Project Settings." 
-    });
+  if (!apiKey) {
+    return res.status(500).json({ error: "API Key is missing in Vercel settings." });
   }
 
   try {
-    const genAI = new GoogleGenAI(apiKey); // Pass the string directly here
+    // FIX: Initialize with an object containing the apiKey
+    const genAI = new GoogleGenAI(apiKey); 
+    
+    // Ensure we are using the correct model name
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     
     const { category, minWords } = req.body;
