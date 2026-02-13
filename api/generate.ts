@@ -13,21 +13,18 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "Server error: API_KEY is not defined in Vercel." });
   }
 
-  try {
-    // 1. INITIALIZE: The new SDK uses GoogleGenAI with an options object
+try {
     const ai = new GoogleGenAI({ apiKey });
     
-    // 2. EXTRACT INPUT: Get category and length from the request body
     const { category, minWords } = req.body;
     const prompt = `Provide a random Bollywood ${category} name with at least ${minWords} words. ONLY return the name itself. No quotes.`;
     
-    // 3. GENERATE: The structure is now ai.models.generateContent
+    // FIX: Pass the model name as a direct string without the "models/" prefix
     const response = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
-      contents: prompt
+      model: "gemini-1.5-flash", 
+      contents: [{ role: "user", parts: [{ text: prompt }] }] // Full schema for v1beta
     });
 
-    // 4. RESPOND: Access the text directly from the response object
     return res.status(200).json({ name: response.text.trim() });
     
   } catch (error: any) {
