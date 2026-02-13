@@ -22,19 +22,31 @@ const App: React.FC = () => {
   const [localScripts, setLocalScripts] = useState(INITIAL_DATA);
   const [showVault, setShowVault] = useState(false);
 
-  const handleGenerate = async () => {
+const handleGenerate = async () => {
     setLoading(true);
     setError(null);
     setResult(null);
 
     if (searchMode === 'local') {
-        const names = (localScripts[category] || "").split('\n').map(n => n.trim()).filter(n => n.length > 0);
-        const filtered = names.filter(name => {
+      const names = (localScripts[category] || "").split('\n').map(n => n.trim()).filter(n => n.length > 0);
+      const filtered = names.filter(name => {
         const wordCount = name.split(/\s+/).filter(Boolean).length;
         return wordCount >= minWords;
+      });
+      
+      if (filtered.length === 0) {
+        setError(`No ${category} found in local vault with ${minWords}+ words.`);
+        setLoading(false);
+        return;
+      }
+
+      await new Promise(r => setTimeout(r, 600)); 
+      const picked = filtered[Math.floor(Math.random() * filtered.length)];
+      setResult(picked);
+      setHistory(prev => [{ name: picked, category, mode: 'Local' }, ...prev].slice(0, 5));
+      setLoading(false);
     } else {
       try {
-        // Instead of calling GoogleGenAI here, we call OUR new server function
         const response = await fetch('/api/generate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
