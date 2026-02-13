@@ -474,7 +474,7 @@ const handleGenerate = async () => {
       <header className="text-center mb-10 z-10 animate-fade">
         <h1 className="bollywood-font">
           <span className="text-4xl md:text-6xl uppercase gradient-text leading-tight drop-shadow-2xl">Bollywood</span><br/>
-          <span className="text-xl md:text-3xl uppercase gradient-text tracking-[0.25em] opacity-80">Data for Dumb Charades</span>
+          <span className="text-xl md:text-3xl uppercase gradient-text tracking-[0.25em] opacity-80">Data for Charades</span>
         </h1>
       </header>
 
