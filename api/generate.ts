@@ -19,15 +19,17 @@ try {
     const { category, minWords } = req.body;
     const prompt = `Provide a random Bollywood ${category} name with at least ${minWords} words. ONLY return the name itself. No quotes.`;
     
-    // FIX: Pass the model name as a direct string without the "models/" prefix
+    // FIX: Use the shorter model name and ensure the correct payload structure
     const response = await ai.models.generateContent({
-      model: "gemini-1.5-flash", 
-      contents: [{ role: "user", parts: [{ text: prompt }] }] // Full schema for v1beta
+      model: "gemini-1.5-flash-latest", // Try the '-latest' alias if the base name fails
+      contents: [{ role: "user", parts: [{ text: prompt }] }]
     });
 
     return res.status(200).json({ name: response.text.trim() });
     
   } catch (error: any) {
+    // If it STILL says 404, the model might have been fully retired.
+    // Try updating to "gemini-2.0-flash" for the latest support.
     console.error("Gemini API Error:", error.message);
     return res.status(500).json({ error: error.message });
   }
