@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 
 export default async function handler(req, res) {
-  // This confirms the key is available to the server
+  // 1. Keep the debug log to be safe
   console.log("DEBUG: Key starts with:", process.env.API_KEY ? process.env.API_KEY.substring(0, 4) : "UNDEFINED");
 
   if (req.method !== 'POST') {
@@ -15,10 +15,10 @@ export default async function handler(req, res) {
   }
 
   try {
-    // FIX: Initialize with an object containing the apiKey
-    const genAI = new GoogleGenAI(apiKey); 
+    // FIX: Pass the apiKey directly as a string to the constructor
+    const genAI = new GoogleGenAI(apiKey);
     
-    // Ensure we are using the correct model name
+    // Explicitly set the model version
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     
     const { category, minWords } = req.body;
