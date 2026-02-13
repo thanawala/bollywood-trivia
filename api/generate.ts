@@ -1,7 +1,7 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
 export default async function handler(req, res) {
-  // 1. Debugging: Check for the Key
+  // Confirm the API key is reaching the server
   const apiKey = process.env.API_KEY;
   console.log("DEBUG: Key Prefix:", apiKey ? apiKey.substring(0, 4) : "MISSING");
 
@@ -10,26 +10,28 @@ export default async function handler(req, res) {
   }
 
   if (!apiKey) {
-    return res.status(500).json({ error: "Server error: API_KEY is not defined." });
+    return res.status(500).json({ error: "Server error: API_KEY is not defined in Vercel." });
   }
 
   try {
-    // 2. Initialize Gemini SDK
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // 1. INITIALIZE: The new SDK uses GoogleGenAI with an options object
+    const ai = new GoogleGenAI({ apiKey });
     
-    // 3. Get input from req.body (Auto-parsed in Vercel Node.js)
+    // 2. EXTRACT INPUT: Get category and length from the request body
     const { category, minWords } = req.body;
     const prompt = `Provide a random Bollywood ${category} name with at least ${minWords} words. ONLY return the name itself. No quotes.`;
     
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    // 3. GENERATE: The structure is now ai.models.generateContent
+    const response = await ai.models.generateContent({
+      model: "gemini-1.5-flash",
+      contents: prompt
+    });
 
-    // 4. Send standard JSON response
-    return res.status(200).json({ name: text.trim() });
+    // 4. RESPOND: Access the text directly from the response object
+    return res.status(200).json({ name: response.text.trim() });
+    
   } catch (error: any) {
-    console.error("Gemini Error:", error.message);
+    console.error("Gemini API Error:", error.message);
     return res.status(500).json({ error: error.message });
   }
 }
