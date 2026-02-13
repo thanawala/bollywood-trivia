@@ -1,9 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
 
-export const config = {
-  runtime: 'edge',
-};
-
 export default async function handler(req: Request) {
   // 1. Get the data sent from your frontend
   const { category, minWords } = await req.json();
