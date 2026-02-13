@@ -29,48 +29,28 @@ const App: React.FC = () => {
     setResult(null);
 
     if (searchMode === 'local') {
-      const names = (localScripts[category] || "").split('\n').map(n => n.trim()).filter(n => n.length > 0);
-      const filtered = names.filter(name => {
+        const names = (localScripts[category] || "").split('\n').map(n => n.trim()).filter(n => n.length > 0);
+        const filtered = names.filter(name => {
         const wordCount = name.split(/\s+/).filter(Boolean).length;
         return wordCount >= minWords;
-      });
-      
-      if (filtered.length === 0) {
-        setError(`No ${category} found in local vault with ${minWords}+ words.`);
-        setLoading(false);
-        return;
-      }
-
-      await new Promise(r => setTimeout(r, 600)); 
-      const picked = filtered[Math.floor(Math.random() * filtered.length)];
-      setResult(picked);
-      setHistory(prev => [{ name: picked, category, mode: 'Local' }, ...prev].slice(0, 5));
-      setLoading(false);
     } else {
       try {
-        // Safe access to process.env.API_KEY to avoid "process is not defined" ReferenceError
-        let apiKey: string | undefined;
-        try {
-          apiKey = (window as any).process?.env?.API_KEY || (typeof process !== 'undefined' ? process.env.API_KEY : undefined);
-        } catch (e) {
-          apiKey = undefined;
-        }
-
-        if (!apiKey) {
-          throw new Error("API_KEY environment variable is not accessible. If you are on Vercel, ensure you've added it to Project Settings > Environment Variables.");
-        }
-
-        const ai = new GoogleGenAI({ apiKey });
-        const response = await ai.models.generateContent({
-          model: 'gemini-3-flash-preview',
-          contents: `Provide a random Bollywood ${category} name with at least ${minWords} words. ONLY return the name itself. No quotes.`,
+        // Instead of calling GoogleGenAI here, we call OUR new server function
+        const response = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category, minWords }),
         });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Engine error");
+        }
         
-        const name = response.text?.trim() || "Engine error";
-        setResult(name);
-        setHistory(prev => [{ name, category, mode: 'Internet' }, ...prev].slice(0, 5));
+        setResult(data.name);
+        setHistory(prev => [{ name: data.name, category, mode: 'Internet' }, ...prev].slice(0, 5));
       } catch (err: any) {
-        console.error("Engine Error Detail:", err);
         setError(err.message || "Failed to connect to the Bollywood Data Engine.");
       } finally {
         setLoading(false);
