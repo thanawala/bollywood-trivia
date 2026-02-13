@@ -1,9 +1,12 @@
 import { GoogleGenAI } from "@google/genai";
 
 export default async function handler(req: Request) {
-  // 1. Check if it's a POST request
+  // 1. Standard safety check
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: "Method Not Allowed" }), { status: 405 });
+    return new Response(JSON.stringify({ error: "Method Not Allowed" }), { 
+      status: 405, 
+      headers: { 'Content-Type': 'application/json' } 
+    });
   }
 
   try {
@@ -11,14 +14,16 @@ export default async function handler(req: Request) {
     const apiKey = process.env.API_KEY;
 
     if (!apiKey) {
-      return new Response(JSON.stringify({ error: "API Key missing in Vercel settings." }), { status: 500 });
+      return new Response(JSON.stringify({ error: "API Key missing in Vercel settings." }), { 
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
-    // NEW UNIFIED SYNTAX:
-    // The constructor expects an object with apiKey, not just a string
+    // Modern SDK constructor
     const ai = new GoogleGenAI({ apiKey });
 
-    // In the new SDK, we call ai.models.generateContent directly
+    // Unified syntax for the generation call
     const response = await ai.models.generateContent({
       model: 'gemini-1.5-flash',
       contents: [{
@@ -27,7 +32,6 @@ export default async function handler(req: Request) {
       }]
     });
     
-    // The response structure has also changed in the unified SDK
     const text = response.text || "Engine error";
 
     return new Response(JSON.stringify({ name: text.trim() }), {
@@ -36,7 +40,10 @@ export default async function handler(req: Request) {
     });
 
   } catch (error: any) {
-    console.error("Server Error:", error);
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    console.error("Vercel Function Error:", error.message);
+    return new Response(JSON.stringify({ error: error.message }), { 
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 }
