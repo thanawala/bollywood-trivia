@@ -1,8 +1,8 @@
 import { GoogleGenAI } from "@google/genai";
 
 export default async function handler(req, res) {
-  // ADD THE LINE HERE:
-  console.log("Key starts with:", process.env.API_KEY?.substring(0, 4));
+// ADD THIS LINE HERE:
+  console.log("DEBUG: Key starts with:", process.env.API_KEY ? process.env.API_KEY.substring(0, 4) : "UNDEFINED");
   
   if (req.method !== 'POST') {
     return res.status(405).json({ error: "Method Not Allowed" });
