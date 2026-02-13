@@ -4,11 +4,406 @@ import ReactDOM from 'react-dom/client';
 
 // --- Configuration & Data ---
 const INITIAL_DATA: Record<string, string> = {
-  'Movies': `Sholay\nDilwale Dulhania Le Jayenge\nLagaan: Once Upon a Time in India\nMother India\nMughal-e-Azam\nZindagi Na Milegi Dobara\nGangs of Wasseypur\n3 Idiots\nBajrangi Bhaijaan\nDil Chahta Hai\nKal Ho Naa Ho\nKuch Kuch Hota Hai\nPathaan\nJawan\nRocky Aur Rani Kii Prem Kahaani`,
-  'Actors': `Amitabh Bachchan\nShah Rukh Khan\nSalman Khan\nAamir Khan\nDeepika Padukone\nPriyanka Chopra Jonas\nRanbir Kapoor\nRanveer Singh\nAlia Bhatt\nNaseeruddin Shah`,
-  'Songs': `Chaiyya Chaiyya\nTum Hi Ho\nKal Ho Naa Ho\nKesariya Tera Ishq Hai Piya\nTujhe Dekha To Yeh Jaana Sanam\nGerua\nKabira`,
-  'Music Directors': `A. R. Rahman\nPritam Chakraborty\nVishal-Shekhar\nShankar-Ehsaan-Loy\nAmit Trivedi\nR. D. Burman`,
-  'Directors': `Sanjay Leela Bhansali\nRajkumar Hirani\nZoya Akhtar\nAnurag Kashyap\nKaran Johar\nImtiaz Ali`
+  'Movies': `Sholay
+Dilwale Dulhania Le Jayenge
+Lagaan
+Mother India
+Mughal-e-Azam
+Pakeezah
+Anand
+Zanjeer
+Deewaar
+Amar Akbar Anthony
+Don
+Qayamat Se Qayamat Tak
+Maine Pyar Kiya
+Hum Aapke Hain Koun
+Dil To Pagal Hai
+Kuch Kuch Hota Hai
+Kaho Naa Pyaar Hai
+Lage Raho Munna Bhai
+Rang De Basanti
+Chak De India
+Jab We Met
+Taare Zameen Par
+Ghajini
+3 Idiots
+My Name Is Khan
+Dabangg
+Zindagi Na Milegi Dobara
+Barfi
+Yeh Jawaani Hai Deewani
+Chennai Express
+Queen
+Haider
+Bajrangi Bhaijaan
+Dangal
+Gully Boy
+Andhadhun
+Article 15
+Drishyam
+Tumbbad
+Baahubali
+Pushpa
+KGF
+Pathaan
+Jawan
+Animal
+Rocky Aur Rani Kii Prem Kahaani
+Brahmastra
+Gangubai Kathiawadi
+Sardar Udham
+Mimi
+Dil Chahta Hai
+Swades
+Kal Ho Naa Ho
+Devdas
+Black
+Om Shanti Om
+Rockstar
+Vicky Donor
+Piku
+Neerja
+Udta Punjab
+Pink
+Raazi
+Badhaai Ho
+Super 30
+Chhichhore
+Thappad
+The Kashmir Files
+Vikram Vedha
+Bhool Bhulaiyaa
+Drishyam 2
+Kantara
+Sita Ramam
+Ponniyin Selvan
+Major
+Rocketry The Nambi Effect
+777 Charlie
+Kantara
+Karthikeya 2
+Bimbisara
+Sita Ramam
+Vikrant Rona
+Charlie 777
+Love Today
+Varisu
+Thunivu
+Dasara
+Virupaksha
+Ponniyin Selvan 2
+2018
+Carry on Jatta 3
+RDX
+Kannur Squad
+Leo
+Jigarthanda Double X
+Hi Nanna
+Kaathal The Core
+Salaar
+Dunki
+12th Fail`,
+  'Actors': `Amitabh Bachchan
+Shah Rukh Khan
+Salman Khan
+Aamir Khan
+Akshay Kumar
+Ajay Devgn
+Hrithik Roshan
+Ranbir Kapoor
+Ranveer Singh
+Ayushmann Khurrana
+Vicky Kaushal
+Rajkummar Rao
+Pankaj Tripathi
+Nawazuddin Siddiqui
+Dilip Kumar
+Raj Kapoor
+Dev Anand
+Rajesh Khanna
+Dharmendra
+Sanjeev Kumar
+Mithun Chakraborty
+Govinda
+Sanjay Dutt
+Anil Kapoor
+Sunny Deol
+Jackie Shroff
+Saif Ali Khan
+Shahid Kapoor
+Varun Dhawan
+Siddharth Malhotra
+Kartik Aaryan
+Tiger Shroff
+John Abraham
+Emraan Hashmi
+Abhishek Bachchan
+Farhan Akhtar
+Arjun Kapoor
+Aditya Roy Kapur
+Rajinikanth
+Kamal Haasan
+Prabhas
+Allu Arjun
+Yash
+Ram Charan
+Jr NTR
+Dulquer Salmaan
+Fahadh Faasil
+Vijay Sethupathi
+Suriya
+Dhanush
+Deepika Padukone
+Priyanka Chopra
+Alia Bhatt
+Kareena Kapoor
+Katrina Kaif
+Anushka Sharma
+Vidya Balan
+Kangana Ranaut
+Shraddha Kapoor
+Kriti Sanon
+Kiara Advani
+Taapsee Pannu
+Bhumi Pednekar
+Sanya Malhotra
+Radhika Apte
+Yami Gautam
+Sara Ali Khan
+Janhvi Kapoor
+Ananya Panday
+Rashmika Mandanna
+Nayanthara
+Samantha Ruth Prabhu
+Madhuri Dixit
+Sridevi
+Rekha
+Hema Malini
+Jaya Bachchan
+Shabana Azmi
+Smita Patil
+Kajol
+Rani Mukerji
+Preity Zinta
+Aishwarya Rai
+Tabu
+Karisma Kapoor
+Juhi Chawla
+Manisha Koirala
+Urmila Matondkar
+Raveena Tandon
+Shilpa Shetty
+Sushmita Sen
+Lara Dutta
+Bipasha Basu
+Parineeti Chopra
+Ileana D'Cruz
+Jacqueline Fernandez
+Nora Fatehi
+Tamannaah Bhatia
+Aditi Rao Hydari
+Sobhita Dhulipala`,
+  'Songs': `Chaiyya Chaiyya
+Dil Se Re
+Tum Hi Ho
+Kesariya
+Zaalima
+Gali Mein Aaj Chand Nikla
+Pehla Nasha
+Tujhe Dekha To
+Chappa Chappa
+Dola Re Dola
+Kal Ho Naa Ho
+Mitwa
+Maula Mere Maula
+Kun Faya Kun
+Phir Se Ud Chala
+Agar Tum Saath Ho
+Channa Mereya
+Bekhayali
+Raataan Lambiyan
+Pasoori
+Natu Natu
+Srivalli
+Manike
+Besharam Rang
+Tere Vaaste
+Phir Aur Kya Chahiye
+Lutt Putt Gaya
+Satranga
+Arjan Vailly
+Pehle Bhi Main
+Hua Main
+Kashmir Main Tu Kanyakumari
+Lungi Dance
+Gerua
+Zingaat
+Malhari
+Deewani Mastani
+Ghoomar
+Khalibali
+Param Sundari
+Raataan Lambiyan
+Tum Kya Mile
+What Jhumka
+Ve Kamleya
+Dil Jhoom
+O Maahi
+Vidaamuyarchi
+Fear Song
+Tauba Tauba
+Soni Soni
+Aaj Ke Baad
+Naseeb Se
+Sun Sajni
+Le Aaunga
+Tere Pyaar Mein
+Pyaar Hota Kayi Baar Hai
+Show Me The Thumka
+Character Dheela 2.0
+Munda Sona Hoon Main
+Chedkhaniyan
+Apna Bana Le
+Thumkeshwari
+Rasiya
+Dance Ka Bhoot
+Deva Deva
+Kaise Hua
+Tujhe Kitna Chahne Lage
+Ghungroo
+Jai Jai Shivshankar
+Shaitan Ka Saala
+O Saki Saki
+Dilbar
+Bom Diggy Diggy
+Dil Chori
+Chote Chote Peg
+Bom Diggy
+High Rated Gabru
+Ban Ja Rani
+Hawa Hawa
+Mere Rashke Qamar
+Nashe Si Chadh Gayi
+The Humma Song
+Enna Sona
+Zaalima
+Laila Main Laila
+The Breakup Song
+Channa Mereya
+Ae Dil Hai Mushkil
+Bulleya
+Baby Ko Bass Pasand Hai
+Jag Ghoomeya
+Kar Gayi Chull
+Bolna
+Soch Na Sake
+Sanam Re
+Gerua
+Janam Janam
+Matargashti
+Heer Toh Badi Sad Hai
+Agar Tum Saath Ho`,
+  'Music Directors': `A.R. Rahman
+Pritam
+Amit Trivedi
+Vishal-Shekhar
+Shankar-Ehsaan-Loy
+Mithoon
+Anirudh Ravichander
+Santhosh Narayanan
+Thaman S
+Devi Sri Prasad
+M.M. Keeravani
+Sneha Khanwalkar
+Ram Sampath
+Sachin-Jigar
+Ajay-Atul
+Sajid-Wajid
+Himesh Reshammiya
+Anu Malik
+Jatin-Lalit
+Nadeem-Shravan
+Laxmikant-Pyarelal
+R.D. Burman
+S.D. Burman
+Kalyanji-Anandji
+Naushad
+O.P. Nayyar
+Madan Mohan
+Shankar-Jaikishan
+Salil Chowdhury
+Khayyam
+Ilaiyaraaja
+Harris Jayaraj
+Yuvan Shankar Raja
+G.V. Prakash Kumar
+D. Imman
+Ghibran
+Sam C.S.
+Sushin Shyam
+Jakes Bejoy
+Vishnu Vijay
+Bijibal
+Shaan Rahman
+M. Jayachandran
+Ravi Basrur
+Ajaneesh Loknath
+Charan Raj
+Arjun Janya
+B. Ajaneesh Loknath
+S. Thaman
+Mani Sharma`,
+  'Directors': `Yash Chopra
+Karan Johar
+Sanjay Leela Bhansali
+Rajkumar Hirani
+Aditya Chopra
+SS Rajamouli
+Zoya Akhtar
+Farhan Akhtar
+Anurag Kashyap
+Vishal Bhardwaj
+Imtiaz Ali
+Rohit Shetty
+Kabir Khan
+Shoojit Sircar
+Nitesh Tiwari
+Ayan Mukerji
+Sriram Raghavan
+Anubhav Sinha
+Vikramaditya Motwane
+Neeraj Pandey
+Hansal Mehta
+Meghna Gulzar
+Ashutosh Gowariker
+Rakeysh Omprakash Mehra
+Mani Ratnam
+Gautham Vasudev Menon
+Pa. Ranjith
+Lokesh Kanagaraj
+Atlee
+Prashanth Neel
+Sandeep Reddy Vanga
+Nag Ashwin
+Sukumar
+Trivikram Srinivas
+Koratala Siva
+Nelson Dilipkumar
+Karthik Subbaraj
+Vetrimaaran
+Mari Selvaraj
+Jeethu Joseph
+Lijo Jose Pellissery
+Anjali Menon
+Basil Joseph
+Dileesh Pothan
+Mahesh Narayanan
+Amal Neerad
+Anwar Rasheed
+Aashiq Abu
+Raj B Shetty
+Rishab Shetty`
 };
 
 const App: React.FC = () => {
