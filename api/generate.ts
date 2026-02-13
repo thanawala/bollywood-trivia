@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 
 export default async function handler(req, res) {
-  // 1. Keep the debug log to be safe
+  // This confirms the key is reaching the Vercel server
   console.log("DEBUG: Key starts with:", process.env.API_KEY ? process.env.API_KEY.substring(0, 4) : "UNDEFINED");
 
   if (req.method !== 'POST') {
@@ -11,14 +11,14 @@ export default async function handler(req, res) {
   const apiKey = process.env.API_KEY;
 
   if (!apiKey) {
-    return res.status(500).json({ error: "API Key is missing in Vercel settings." });
+    return res.status(500).json({ error: "API Key missing in Vercel settings." });
   }
 
   try {
-    // FIX: Pass the apiKey directly as a string to the constructor
-    const genAI = new GoogleGenAI(apiKey);
+    // FIX: Instead of just passing 'apiKey', pass an object with the property 'apiKey'
+    const genAI = new GoogleGenAI(apiKey); 
     
-    // Explicitly set the model version
+    // Explicitly fetching the model
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     
     const { category, minWords } = req.body;
@@ -31,6 +31,7 @@ export default async function handler(req, res) {
     return res.status(200).json({ name: text.trim() });
   } catch (error: any) {
     console.error("Gemini API Error:", error.message);
+    // If the error persists, this will tell us if it's a 'key' issue or a 'model' issue
     return res.status(500).json({ error: error.message });
   }
 }
