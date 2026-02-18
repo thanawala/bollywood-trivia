@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
+import { GoogleGenAI } from "@google/genai";
 
 // --- Configuration & Data ---
 const INITIAL_DATA: Record<string, string> = {
