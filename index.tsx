@@ -184,7 +184,7 @@ const App: React.FC = () => {
           >
             <span className="relative z-10 flex items-center justify-center gap-4">
               {loading ? <i className="fas fa-atom fa-spin"></i> : <i className="fas fa-clapperboard text-sm opacity-60"></i>}
-              {loading ? 'Decrypting...' : 'Initiate Scan'}
+              {loading ? 'Searching...' : 'Initiate Scan'}
             </span>
             <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out"></div>
           </button>
