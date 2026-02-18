@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
-import { GoogleGenAI } from "@google/genai";
 
 // --- Configuration & Data ---
 const INITIAL_DATA: Record<string, string> = {
@@ -59,7 +58,6 @@ const App: React.FC = () => {
       setLoading(false);
     } else {
       try {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         
         // Include a list of recently used words to avoid repeats
         const blacklist = Array.from(usedWords).slice(-15).join(', ');
@@ -67,12 +65,14 @@ const App: React.FC = () => {
         IMPORTANT: Do not provide any of the following names: [${blacklist}].
         Respond with ONLY the name. Do not include quotes or extra text.`;
         
-        const response = await ai.models.generateContent({
-          model: 'gemini-3-flash-preview',
-          contents: prompt,
+        const response = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ category, minWords }),
         });
-
-        const name = response.text?.trim();
+        
+        const data = await response.json();
+        const name = data.name;
         if (!name) throw new Error("The Engine returned an empty response.");
 
         // Client-side duplicate check
